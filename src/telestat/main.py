@@ -12,7 +12,7 @@ def get_data():
     parser.add_argument(dest="path")
     args = parser.parse_args()
     path = Path(args.path).expanduser()
-    print("path is", path)
+    print(f"Loading: {path}")
     with open(path) as f:
         data = json.load(f)
     return data
@@ -30,7 +30,7 @@ def process_messages(messages):
     df = pd.DataFrame(dict(stats))
     df = df.transpose()
     df["avg"] = df["len"] / df["count"]
-    return df
+    return df.sort_values(by=["count"])
 
 
 def plot_stats(df, channel, key):
@@ -41,7 +41,7 @@ def plot_stats(df, channel, key):
     plt.xticks(rotation=20, ha="right")
     # plt.show()
     fname = f"{channel}--{key}.png".replace(" ", "_")
-    print(fname)
+    print(f"Saving: {fname}")
     plt.savefig(fname)
 
 
